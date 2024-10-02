@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="po_order_potong_form_view" model="ir.ui.view">
+            <field name="name">po.order.potong.form.view</field>
+            <field name="model">sdl.order.potong</field>
+            <field name="arch" type="xml">
+                <form string="Order Potong">
+                    <header>
+                        <button type="action" string="Create PO" name="%(sdl_order_potong_create_po_actions)d"
+                                class="btn-primary"
+                                attrs="{'invisible': [('state','not in','progress')]}"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object"
+                                    name="action_view_po"
+                                    class="oe_stat_button"
+                                    icon="fa-pencil-square-o"
+                                    attrs="{'invisible': [('purchase_id', '=', False)]}">
+                                <field name="purchase_id" widget="statinfo" string="Purchase"/>
+                            </button>
+                            <button type="object"
+                                    name="action_view_do"
+                                    class="oe_stat_button"
+                                    icon="fa-truck"
+                                    attrs="{'invisible': [('picking_id', '=', False)]}">
+                                <field name="picking_id" widget="statinfo" string="Picking"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="order_potong_date" attrs="{'readonly': [('state','in','done')]}"/>
+                            </group>
+                            <group>
+                                <field name="source_location_id" required="1"
+                                       attrs="{'readonly': [('state','in','done')]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Order Potong" name="order_potong_line">
+                                <field name="order_potong_line" attrs="{'readonly': [('state','in','done')]}">
+                                    <tree editable="bottom">
+                                        <field name="order_potong_id" invisible="1"/>
+                                        <field name="product_id"/>
+                                        <field name="qty"/>
+                                        <field name="keterangan"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Hasil Potong" name="hasil_potong">
+                                <field name="hasil_potong_ids" attrs="{'readonly': [('state','in','done')]}">
+                                    <tree editable="bottom">
+                                        <field name="order_potong_id" invisible="1"/>
+                                        <field name="product_id"/>
+                                        <field name="qty"/>
+                                        <field name="keterangan"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="po_order_potong_tree_view" model="ir.ui.view">
+            <field name="name">po.order.potong.tree.view</field>
+            <field name="model">sdl.order.potong</field>
+            <field name="arch" type="xml">
+                <tree string="Order Potong" create="0">
+                    <field name="name"/>
+                    <field name="order_potong_date"/>
+                    <field name="order_potong_line" widget="many2many_tags"/>
+                    <field name="hasil_potong_ids" widget="many2many_tags" string="Hasil Potong"/>
+                    <field name="state" widget="badge" decoration-success="state == 'done'"
+                           decoration-info="state == 'progress'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="po_order_potong_search_view" model="ir.ui.view">
+            <field name="name">order.potong.search.view</field>
+            <field name="model">sdl.order.potong</field>
+            <field name="arch" type="xml">
+                <search string="Order Potong">
+                    <field name="name"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Status" name="state" domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="po_sdl_order_potong_actions" model="ir.actions.act_window">
+            <field name="name">Order Potong</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sdl.order.potong</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                  (0, 0, {'view_mode': 'tree', 'view_id': ref('po_order_potong_tree_view')}),
+                                  (0, 0, {'view_mode': 'form', 'view_id': ref('po_order_potong_form_view')})]"/>
+            <field name="domain">[('state', '!=', 'draft')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new ModelTitle.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Order Potong" id="po_order_potong_menu" parent="purchase.menu_procurement_management"
+                  sequence="20"
+                  action="po_sdl_order_potong_actions"/>
+
+    </data>
+</odoo>
