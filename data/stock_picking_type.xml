@@ -11,5 +11,14 @@
             <field name="default_location_dest_id" ref="stock.stock_location_output"/> <!-- Destination location -->
         </record>
 
+        <record id="stock_picking_type_vendor_to_vendor" model="stock.picking.type">
+            <field name="name">Vendor to Vendor</field>
+            <field name="code">incoming</field> <!-- or use 'incoming', 'outgoing' as per your use case -->
+            <field name="sequence_code">VtV</field>
+            <field name="warehouse_id" ref="stock.warehouse0"/> <!-- Change this to the correct warehouse -->
+            <field name="default_location_src_id" ref="stock.stock_location_suppliers"/> <!-- Source location -->
+            <field name="default_location_dest_id" ref="stock.stock_location_suppliers"/> <!-- Destination location -->
+        </record>
+
     </data>
 </odoo>

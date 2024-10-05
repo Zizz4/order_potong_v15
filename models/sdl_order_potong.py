@@ -68,7 +68,7 @@ class SDLOrderPotong(models.Model):
         picking_type_order_potong = self.env.ref('sdl_order_potong.stock_picking_type_order_potong')
         picking_vals = {
             'picking_type_id': picking_type_order_potong.id,
-            'location_id': picking_type_order_potong.default_location_src_id.id,  # Source location
+            'location_id': self.source_location_id.id,  # Source location
             'location_dest_id': picking_type_order_potong.default_location_dest_id.id,  # Destination location
             'origin': self.name,  # Reference the Order Potong
             'move_lines': []
@@ -79,7 +79,7 @@ class SDLOrderPotong(models.Model):
                 'product_id': line.product_id.id,
                 'product_uom_qty': line.qty,
                 'product_uom': line.product_id.uom_id.id,
-                'location_id': picking_type_order_potong.default_location_src_id.id,  # Source location
+                'location_id': self.source_location_id.id,  # Source location
                 'location_dest_id': picking_type_order_potong.default_location_dest_id.id,  # Destination location
             }
             picking_vals['move_lines'].append((0, 0, move_vals))
@@ -97,6 +97,7 @@ class SDLOrderPotong(models.Model):
         picking.button_validate()
 
         self.picking_id = picking
+
 
 class SDLOrderPotongLine(models.Model):
     _name = 'sdl.order.potong.line'

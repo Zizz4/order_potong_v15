@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="purchase_order_form_inherit_order_potong" model="ir.ui.view">
+            <field name="name">purchase.order.form.inherit.order.potong</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <field name="state" position="before">
+                    <button name="action_open_ambil_potong_wizard" type="object" string="Ambil Potong"
+                            class="oe_highlight" attrs="{'invisible': [('order_type','!=','order_potong')]}"/>
+                </field>
+
+                <xpath expr="//group/group[1]/field[@name='currency_id']" position="after">
+                    <field name="order_type"/>
+                </xpath>
+
+                <xpath expr="//notebook/page[@name='products']" position="after">
+                    <page string="Hasil Potong" name="hasil_potong" attrs="{'invisible': [('order_type','!=','order_potong')]}">
+                        <field name="hasil_potong_ids">
+                            <tree create="0" edit="0">
+                                <field name="purchase_id" invisible="1"/>
+                                <field name="product_id"/>
+                                <field name="qty"/>
+                                <field name="po_line_id"/>
+                                <field name="qty_asal"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+                <field name="product_qty" position="after">
+                    <field name="quantity_potong" readonly="1" attrs="{'invisible': [('parent.order_type','!=','order_potong')]}"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

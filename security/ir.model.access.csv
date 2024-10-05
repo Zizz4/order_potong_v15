@@ -5,3 +5,7 @@ access_sdl_hasil_potong,access_sdl_hasil_potong,model_sdl_hasil_potong,,1,1,1,1
 
 access_sdl_order_potong_create_po,access_sdl_order_potong_create_po,model_sdl_order_potong_create_po,,1,1,1,1
 access_sdl_order_potong_create_po_line,access_sdl_order_potong_create_po_line,model_sdl_order_potong_create_po_line,,1,1,1,1
+
+access_purchase_hasil_potong,access_purchase_hasil_potong,model_purchase_hasil_potong,,1,1,1,1
+access_sdl_purchase_ambil_potong,access_sdl_purchase_ambil_potong,model_sdl_purchase_ambil_potong,,1,1,1,1
+access_sdl_purchase_ambil_potong_line,access_sdl_purchase_ambil_potong_line,model_sdl_purchase_ambil_potong_line,,1,1,1,1
