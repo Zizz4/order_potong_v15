@@ -51,7 +51,7 @@ class SDLOrderPotongCreatePO(models.TransientModel):
                 'name': line.product_id.name,
                 'date_planned': fields.Datetime.now(),
                 'product_uom': line.product_id.uom_po_id.id,
-                'taxes_id': [(6, 0, line.product_id.supplier_taxes_id.ids)]
+                'taxes_id': [(6, 0, line.taxes_id.ids)]
             }
             po_vals['order_line'].append((0, 0, po_line_vals))
         po = self.env['purchase.order'].create(po_vals)
@@ -77,9 +77,23 @@ class SDLOrderPotongCreatePOLine(models.TransientModel):
     currency_id = fields.Many2one('res.currency', 'Currency', related='order_id.currency_id')
     qty = fields.Float('Qty')
     unit_price = fields.Monetary('Unit Price')
+    taxes_id = fields.Many2many('account.tax', string='Taxes')
     total_price = fields.Monetary('Total Price')
 
-    @api.onchange('qty', 'unit_price')
+    @api.onchange('qty', 'unit_price', 'taxes_id')
     def _onchange_total_price(self):
+        """Calculate total price including taxes."""
         for rec in self:
-            rec.total_price = rec.qty * rec.unit_price
+            # Calculate base amount (without taxes)
+            base_amount = rec.qty * rec.unit_price
+
+            if rec.taxes_id:
+                # Compute taxes using Odoo's built-in method
+                taxes = rec.taxes_id.compute_all(base_amount, currency=rec.currency_id, quantity=1.0,
+                                                 product=rec.product_id, partner=rec.order_id.partner_id)
+
+                # Get the total amount including taxes
+                rec.total_price = taxes['total_included']
+            else:
+                # If no taxes are applied, use the base amount
+                rec.total_price = base_amount

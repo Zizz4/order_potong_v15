@@ -92,7 +92,7 @@
             </field>
         </record>
 
-        <menuitem name="Order Potong" id="order_potong_menu" parent="stock.menu_stock_warehouse_mgmt"
+        <menuitem name="Order Potong" id="order_potong_menu" parent="stock.menu_stock_root"
                   sequence="50"
                   action="sdl_order_potong_actions"/>
 
